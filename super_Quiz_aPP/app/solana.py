@@ -4,6 +4,7 @@ from solana.system_program import TransferParams, transfer
 from solana.publickey import PublicKey
 from solana.keypair import Keypair
 from solana.rpc.types import TxOpts
+import base64
 
 class SolanaService:
     def __init__(self, url, secret_key):
@@ -33,3 +34,24 @@ class SolanaService:
     def get_balance(self, address):
         response = self.client.get_balance(PublicKey(address))
         return response['result']['value']
+
+# Sample secret key (base64 encoded)
+# Note: Replace this with your actual secret key for a real application.
+sample_secret_key = base64.b64decode(
+    "3rloUS9PtWtP4y7ZlBY1oQMdMSVt1mZ2YnvhjLf5Y5XnZgDkjoZTxPczJK+VRA/NFRQF3N0KH5ujjs7GZ/34wQ=="
+)
+
+# Initialize SolanaService with the sample secret key
+solana_service = SolanaService("https://api.devnet.solana.com", sample_secret_key)
+
+# Print the public key associated with this secret key
+print("Public Key:", solana_service.payer.public_key)
+
+# Example usage:
+# Check the balance of the associated public key
+balance = solana_service.get_balance(solana_service.payer.public_key)
+print("Balance:", balance)
+
+# To send SOL to another address (replace with a real public key address):
+# confirmation = solana_service.send_blinks('RecipientPublicKeyHere', amount_in_lamports)
+# print(confirmation)
